@@ -19,12 +19,21 @@
                     [`walk-up-${i}`, {x: i * 48, y: 5 * 48, w: 48, h: 48}],
                     [`walk-down-${i}`, {x: i * 48, y: 3 * 48, w: 48, h: 48}],
                 ]))),
+                animations: {
+                    'idle': range(0,6).map((i) => `idle-${i}`),
+                    'walk-right': range(0,6).map((i) => `walk-right-${i}`),
+                    'walk-up': range(0,6).map((i) => `walk-up-${i}`),
+                    'walk-left': range(0,6).map((i) => `walk-left-${i}`),
+                    'walk-down': range(0,6).map((i) => `walk-down-${i}`),
+                },
                 scale: 2,
             })
         }),
 
         player = {
             spriteSheet,
+
+            animation: spriteSheet.animations['walk-down'],
 
             x: 0,
             y: 0,
@@ -42,6 +51,24 @@
                     (keysState['ArrowLeft'] ? -50 : 0)
                     + (keysState['ArrowRight'] ? 50 : 0)
                 )
+
+                let nextAnimation;
+                if (this.xVel)
+                    nextAnimation = this.xVel > 0
+                        ? spriteSheet.animations['walk-right']
+                        : spriteSheet.animations['walk-left']
+                else if (this.yVel)
+                    nextAnimation = this.yVel > 0
+                        ? spriteSheet.animations['walk-down']
+                        : spriteSheet.animations['walk-up']
+                else
+                    this.animation.stop()
+
+                if (nextAnimation && nextAnimation != this.animation) {
+                    this.animation.stop()
+                    this.animation = nextAnimation
+                    this.animation.start()
+                }
             },
 
             update: function (deltaTime) {
@@ -52,7 +79,8 @@
             },
 
             render (ctx, deltaTime) {
-                this.spriteSheet.frames['walk-down-1'].draw(ctx, this.x, this.y)
+                const currentFrame = this.animation.getCurrentFrame()
+                currentFrame.draw(ctx, this.x, this.y)
             }
         },
 
