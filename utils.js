@@ -43,7 +43,8 @@ const utils = (() => {
     }
 
     const Animation = class {
-        constructor({frames, frameRate}) {
+        constructor({frames, frameRate, name}) {
+            this.name = name
             this.frames = frames
             this.frameRate = frameRate
             this.accumulatedTime = 0
@@ -82,7 +83,8 @@ const utils = (() => {
 
             this.animations = _.mapValues(
                 animations,
-                animationData => new Animation({
+                (animationData, animationName) => new Animation({
+                    name: animationName,
                     frames:
                         animationData.map(frameName => this.frames[frameName]),
                     frameRate: 6,
