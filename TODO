@@ -1,0 +1,3 @@
+- Each animation has the same frameRate, make it possible to animations have
+  different frame rates
+- Implement attacking animation logic
