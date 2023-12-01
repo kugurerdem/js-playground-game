@@ -11,7 +11,13 @@
             return new SpriteSheet({
                 image: sheetImg,
                 frames: fromPairs(range(0, 6).flatMap((i) => ([
-                    [`idle-${i}`, {x: i * 48, y: 0, w: 48, h: 48}],
+                    [`idle-down-${i}`, {x: i * 48, y: 0, w: 48, h: 48}],
+                    [`idle-right-${i}`, {x: i * 48, y: 48, w: 48, h: 48}],
+                    [`idle-left-${i}`, {
+                        x: i * 48, y: 48, w: 48, h: 48, flip: true,
+                    }],
+                    [`idle-up-${i}`, {x: i * 48, y: 2 * 48, w: 48, h: 48}],
+
                     [`walk-right-${i}`, {x: i * 48, y: 4 * 48, w: 48, h: 48}],
                     [`walk-left-${i}`, {
                         x: i * 48, y: 4 * 48, w: 48, h: 48, flip: true,
@@ -20,7 +26,11 @@
                     [`walk-down-${i}`, {x: i * 48, y: 3 * 48, w: 48, h: 48}],
                 ]))),
                 animations: {
-                    'idle': range(0,6).map((i) => `idle-${i}`),
+                    'idle-down': range(0,6).map((i) => `idle-down-${i}`),
+                    'idle-right': range(0,6).map((i) => `idle-right-${i}`),
+                    'idle-left': range(0,6).map((i) => `idle-left-${i}`),
+                    'idle-up': range(0,6).map((i) => `idle-up-${i}`),
+
                     'walk-right': range(0,6).map((i) => `walk-right-${i}`),
                     'walk-up': range(0,6).map((i) => `walk-up-${i}`),
                     'walk-left': range(0,6).map((i) => `walk-left-${i}`),
@@ -34,7 +44,7 @@
             spriteSheet,
 
             animation: (() => {
-                const animation = spriteSheet.animations['idle']
+                const animation = spriteSheet.animations['idle-down']
                 animation.start()
                 return animation
             })(),
