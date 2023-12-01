@@ -11,7 +11,7 @@
             return new SpriteSheet({
                 image: sheetImg,
                 frames: fromPairs(range(0, 6).flatMap((i) => ([
-                    [`idle-{i}`, {x: i * 48, y: 0, w: 48, h: 48}],
+                    [`idle-${i}`, {x: i * 48, y: 0, w: 48, h: 48}],
                     [`walk-right-${i}`, {x: i * 48, y: 4 * 48, w: 48, h: 48}],
                     [`walk-left-${i}`, {
                         x: i * 48, y: 4 * 48, w: 48, h: 48, flip: true,
@@ -62,13 +62,18 @@
                         ? spriteSheet.animations['walk-down']
                         : spriteSheet.animations['walk-up']
                 else
-                    this.animation.stop()
+                    nextAnimation = spriteSheet.animations['idle']
 
-                if (nextAnimation && nextAnimation != this.animation) {
+                if (!nextAnimation)
+                    return
+
+                if (nextAnimation != this.animation) {
                     this.animation.stop()
                     this.animation = nextAnimation
-                    this.animation.start()
                 }
+
+                if (!this.animation.active)
+                    this.animation.start()
             },
 
             update: function (deltaTime) {
