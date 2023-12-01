@@ -66,24 +66,36 @@
                     + (keysState['ArrowRight'] ? 50 : 0)
                 )
 
-                let nextAnimation;
+                let nextAnimationName;
                 if (this.xVel)
-                    nextAnimation = this.xVel > 0
-                        ? spriteSheet.animations['walk-right']
-                        : spriteSheet.animations['walk-left']
-                else if (this.yVel)
-                    nextAnimation = this.yVel > 0
-                        ? spriteSheet.animations['walk-down']
-                        : spriteSheet.animations['walk-up']
-                else
-                    nextAnimation = spriteSheet.animations['idle']
+                    nextAnimationName =
+                        this.xVel > 0 ? 'walk-right' : 'walk-left'
 
-                if (!nextAnimation)
+                else if (this.yVel)
+                    nextAnimationName =
+                        this.yVel > 0 ? 'walk-down' : 'walk-up'
+
+                else {
+                    const
+                        directionPattern = /down|up|left|right/,
+
+                        currentDirection =
+                            this.animation.name.match(directionPattern)[0]
+                    // TODO: ^ these things does not feel right, I think we
+                    // should have a state to recognize which direction we are
+                    // aheaded, or looking to
+
+                    if (currentDirection)
+                        nextAnimationName = 'idle-' + currentDirection
+                }
+
+                if (!nextAnimationName)
                     return
 
-                if (nextAnimation != this.animation) {
+                if (nextAnimationName != this.animation.name) {
                     this.animation.stop()
-                    this.animation = nextAnimation
+                    this.animation =
+                        this.spriteSheet.animations[nextAnimationName]
                 }
 
                 if (!this.animation.active)
