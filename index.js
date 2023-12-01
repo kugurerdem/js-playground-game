@@ -33,7 +33,11 @@
         player = {
             spriteSheet,
 
-            animation: spriteSheet.animations['walk-down'],
+            animation: (() => {
+                const animation = spriteSheet.animations['idle']
+                animation.start()
+                return animation
+            })(),
 
             x: 0,
             y: 0,
