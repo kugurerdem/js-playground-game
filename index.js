@@ -94,7 +94,6 @@
 
             ;['keydown', 'keyup'].forEach((eventName) => {
                 document.addEventListener(eventName, (e) => {
-                    e.preventDefault()
                     keysState[e.key] = eventName == 'keydown' ? true : false
                     player.handleInput(e, keysState)
                 })
