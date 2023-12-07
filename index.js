@@ -95,6 +95,8 @@
         player = {
             spriteSheet,
 
+            direction: 'down',
+
             animation: (() => {
                 const animation = spriteSheet.getAnimation('idle-down')
                 animation.start()
@@ -118,31 +120,26 @@
                     + (keysState['ArrowRight'] ? 50 : 0)
                 )
 
-                let nextAnimationName;
                 if (this.xVel)
-                    nextAnimationName =
-                        this.xVel > 0 ? 'walk-right' : 'walk-left'
+                    this.direction = this.xVel > 0 ? 'right' : 'left'
 
                 else if (this.yVel)
+                    this.direction = this.yVel > 0 ? 'down' : 'up'
+
+                let nextAnimationName;
+
+                if (
+                    input.code == 'Space'
+                    && input.type == 'keydown'
+                    && input.repeat == false
+                )
+                    nextAnimationName = 'attack-' + this.direction
+
+                else
                     nextAnimationName =
-                        this.yVel > 0 ? 'walk-down' : 'walk-up'
-
-                else {
-                    const
-                        directionPattern = /down|up|left|right/,
-
-                        currentDirection =
-                            this.animation.name.match(directionPattern)[0]
-                    // TODO: ^ these things does not feel right, I think we
-                    // should have a state to recognize which direction we are
-                    // aheaded, or looking to
-
-                    if (currentDirection)
-                        nextAnimationName = 'idle-' + currentDirection
-                }
-
-                if (!nextAnimationName)
-                    return
+                        (this.xVel || this.yVel)
+                            ? 'walk-' + this.direction
+                            : 'idle-' + this.direction
 
                 if (nextAnimationName != this.animation.name) {
                     this.animation.stop()
@@ -198,9 +195,6 @@
         },
 
         render = (deltaTime) => {
-            // get draw params
-
-            // draw them
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             player.render(ctx)
         }
