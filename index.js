@@ -128,6 +128,9 @@
 
                 let nextAnimationName;
 
+                if (this.animation.name.startsWith('attack'))
+                    return
+
                 if (
                     input.code == 'Space'
                     && input.type == 'keydown'
@@ -145,6 +148,14 @@
                     this.animation.stop()
                     this.animation =
                         this.spriteSheet.getAnimation(nextAnimationName)
+
+                    if (this.animation.name.startsWith('attack'))
+                        this.animation.once('complete', () => {
+                            this.animation = this.spriteSheet.getAnimation(
+                                'idle-' + this.direction
+                            )
+                            this.animation.start()
+                        })
                 }
 
                 if (!this.animation.active)
@@ -195,7 +206,8 @@
         },
 
         render = (deltaTime) => {
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            ctx.fillStyle = 'lightgray'
+            ctx.fillRect(0, 0, canvas.width, canvas.height)
             player.render(ctx)
         }
 
