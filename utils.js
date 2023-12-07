@@ -1,6 +1,37 @@
 const utils = (() => {
     const {assign} = Object
 
+    const EventEmitter = class {
+        constructor () {
+            this.listeners = {}
+        }
+
+        on (event, listener) {
+            if (!this.listeners[event]) this.listeners[event] = []
+            this.listeners[event].push(listener)
+        }
+
+        off (event, listener) {
+            if (!this.listeners[event]) return
+            this.listeners[event] = this.listeners[event].filter(
+                l => l !== listener
+            )
+        }
+
+        once (event, listener) {
+            const onceListener = (...args) => {
+                listener(...args)
+                this.off(event, onceListener)
+            }
+            this.on(event, onceListener)
+        }
+
+        emit (event, ...args) {
+            if (!this.listeners[event]) return
+            this.listeners[event].forEach(listener => listener(...args))
+        }
+    }
+
     const SpriteImage = class {
         constructor({image, x, y, w, h, scale, flip, flop}) {
             this.image = image
@@ -107,6 +138,7 @@ const utils = (() => {
 
 
     return {
+        EventEmitter,
         SpriteImage,
         Animation,
         SpriteSheet,
