@@ -24,18 +24,70 @@
                     }],
                     [`walk-up-${i}`, {x: i * 48, y: 5 * 48, w: 48, h: 48}],
                     [`walk-down-${i}`, {x: i * 48, y: 3 * 48, w: 48, h: 48}],
-                ]))),
-                animations: {
-                    'idle-down': range(0,6).map((i) => `idle-down-${i}`),
-                    'idle-right': range(0,6).map((i) => `idle-right-${i}`),
-                    'idle-left': range(0,6).map((i) => `idle-left-${i}`),
-                    'idle-up': range(0,6).map((i) => `idle-up-${i}`),
 
-                    'walk-right': range(0,6).map((i) => `walk-right-${i}`),
-                    'walk-up': range(0,6).map((i) => `walk-up-${i}`),
-                    'walk-left': range(0,6).map((i) => `walk-left-${i}`),
-                    'walk-down': range(0,6).map((i) => `walk-down-${i}`),
+                    [`attack-down-${i}`, {x: i * 48, y: 6 * 48, w: 48, h: 48}],
+                    [`attack-right-${i}`, {x: i * 48, y: 7 * 48, w: 48, h: 48}],
+                    [`attack-left-${i}`, {
+                        x: i * 48, y: 7 * 48, w: 48, h: 48, flip: true,
+                    }],
+                    [`attack-up-${i}`, {x: i * 48, y: 8 * 48, w: 48, h: 48}],
+                ]))),
+
+                animations: {
+                    'idle-down': {
+                        frames: range(0,6).map((i) => `idle-down-${i}`),
+                        frameRate: 6,
+                    },
+                    'idle-right': {
+                        frames: range(0,6).map((i) => `idle-right-${i}`),
+                        frameRate: 6,
+                    },
+                    'idle-left': {
+                        frames: range(0,6).map((i) => `idle-left-${i}`),
+                        frameRate: 6,
+                    },
+                    'idle-up': {
+                        frames: range(0,6).map((i) => `idle-up-${i}`),
+                        frameRate: 6,
+                    },
+
+
+                    'walk-right': {
+                        frames: range(0,6).map((i) => `walk-right-${i}`),
+                        frameRate: 6,
+                    },
+                    'walk-up': {
+                        frames: range(0,6).map((i) => `walk-up-${i}`),
+                        frameRate: 6,
+                    },
+                    'walk-left': {
+                        frames: range(0,6).map((i) => `walk-left-${i}`),
+                        frameRate: 6,
+                    },
+                    'walk-down': {
+                        frames: range(0,6).map((i) => `walk-down-${i}`),
+                        frameRate: 6,
+                    },
+
+
+                    'attack-down': {
+                        frames: range(0,4).map((i) => `attack-down-${i}`),
+                        frameRate: 8,
+                    },
+                    'attack-right': {
+                        frames: range(0,4).map((i) => `attack-right-${i}`),
+                        frameRate: 8,
+                    },
+                    'attack-left': {
+                        frames: range(0,4).map((i) => `attack-left-${i}`),
+                        frameRate: 8,
+                    },
+                    'attack-up': {
+                        frames: range(0,4).map((i) => `attack-up-${i}`),
+                        frameRate: 8,
+                    },
                 },
+
                 scale: 2,
             })
         }),
@@ -44,7 +96,7 @@
             spriteSheet,
 
             animation: (() => {
-                const animation = spriteSheet.animations['idle-down']
+                const animation = spriteSheet.getAnimation('idle-down')
                 animation.start()
                 return animation
             })(),
@@ -95,7 +147,7 @@
                 if (nextAnimationName != this.animation.name) {
                     this.animation.stop()
                     this.animation =
-                        this.spriteSheet.animations[nextAnimationName]
+                        this.spriteSheet.getAnimation(nextAnimationName)
                 }
 
                 if (!this.animation.active)

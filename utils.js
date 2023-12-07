@@ -81,15 +81,20 @@ const utils = (() => {
                 frameData => new SpriteImage({image, ...frameData, scale}),
             )
 
-            this.animations = _.mapValues(
-                animations,
-                (animationData, animationName) => new Animation({
-                    name: animationName,
-                    frames:
-                        animationData.map(frameName => this.frames[frameName]),
-                    frameRate: 6,
-                }),
-            )
+            this.animations = animations // { [name]: { frames, frameRate } }
+        }
+
+        getAnimation (name) {
+            const
+                animation = this.animations[name],
+                frames =
+                    animation.frames.map(frameName => this.frames[frameName]),
+                frameRate = animation.frameRate
+
+            return new Animation({
+                name, frames, frameRate,
+            })
+
         }
     }
 
