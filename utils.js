@@ -73,8 +73,9 @@ const utils = (() => {
         }
     }
 
-    const Animation = class {
+    const Animation = class extends EventEmitter {
         constructor({frames, frameRate, name}) {
+            super()
             this.name = name
             this.frames = frames
             this.frameRate = frameRate
@@ -85,6 +86,9 @@ const utils = (() => {
         update (deltaTime) {
             if (!this.active) return
             this.accumulatedTime += deltaTime
+            if (this.accumulatedTime > this.frames.length / this.frameRate) {
+                this.emit('complete')
+            }
         }
 
         getCurrentFrame () {
