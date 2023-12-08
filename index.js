@@ -100,12 +100,6 @@
             }
         },
 
-        player = new Player({
-            spriteSheet,
-            x: 0,
-            y: 0
-        }),
-
         main = () => {
             const keysState = {}
 
@@ -116,13 +110,22 @@
                 })
             })
 
+            const
+                player = new Player({
+                    spriteSheet,
+                    x: 0,
+                    y: 0,
+                }),
+
+                entities = [player]
+
             let
                 lastTime = Date.now() / 1000,
                 deltaTime = 0
 
             const loop = () => {
-                update(deltaTime)
-                render(ctx, deltaTime)
+                update(deltaTime, entities)
+                render(deltaTime, entities)
 
                 now = Date.now() / 1000
                 deltaTime = now - lastTime
@@ -132,14 +135,14 @@
             setInterval(loop, 1000 / 60)
         },
 
-        update = (deltaTime) => {
-            player.update(deltaTime)
-        },
+        update = (deltaTime, entities) =>
+            entities.forEach((entity) => entity.update(deltaTime)),
 
-        render = (deltaTime) => {
+        render = (deltaTime, entities) => {
             ctx.fillStyle = 'lightgray'
             ctx.fillRect(0, 0, canvas.width, canvas.height)
-            player.render(ctx)
+
+            entities.forEach((entity) => entity.render(ctx, deltaTime))
         }
 
 
