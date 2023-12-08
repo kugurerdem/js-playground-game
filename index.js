@@ -11,32 +11,50 @@
     spriteSheet = await playerSpriteSheet
 
     const
-        player = {
-            spriteSheet,
+        Entity = class {
+            constructor ({spriteSheet, x, y}) {
+                this.spriteSheet = spriteSheet
+                this.x = x
+                this.y = y
+                this.xVel = 0
+                this.yVel = 0
+            }
 
-            direction: 'down',
+            update (deltaTime) {
+                this.x += this.xVel * (deltaTime)
+                this.y += this.yVel * (deltaTime)
 
-            animation: (() => {
-                const animation = spriteSheet.getAnimation('idle-down')
-                animation.start()
-                return animation
-            })(),
+                this.animation.update(deltaTime)
+            }
 
-            x: 0,
-            y: 0,
+            render (ctx, deltaTime) {
+                const currentFrame = this.animation.getCurrentFrame()
+                currentFrame.draw(ctx, this.x, this.y)
+            }
+        },
 
-            xVel: 0,
-            yVel: 0,
+        Player = class extends Entity {
+            constructor ({spriteSheet, x, y}) {
+                super({spriteSheet, x, y})
+                this.direction = 'down'
+                this.animation = spriteSheet.getAnimation('idle-down')
 
-            handleInput: function (input, keysState) {
+                this.animation.start()
+
+                this.xSpeed = 50
+                this.ySpeed = 50
+                // TODO: ^ find a better variable name for these
+            }
+
+            handleInput (input, keysState) {
                 this.yVel = (
-                    (keysState['ArrowUp'] ? -50 : 0)
-                    + (keysState['ArrowDown'] ? 50 : 0)
+                    (keysState['ArrowUp'] ? -this.ySpeed : 0)
+                    + (keysState['ArrowDown'] ? this.xSpeed : 0)
                 )
 
                 this.xVel = (
-                    (keysState['ArrowLeft'] ? -50 : 0)
-                    + (keysState['ArrowRight'] ? 50 : 0)
+                    (keysState['ArrowLeft'] ? -this.xSpeed : 0)
+                    + (keysState['ArrowRight'] ? this.xSpeed : 0)
                 )
 
                 if (this.xVel)
@@ -79,20 +97,14 @@
 
                 if (!this.animation.active)
                     this.animation.start()
-            },
-
-            update: function (deltaTime) {
-                this.x += this.xVel * (deltaTime)
-                this.y += this.yVel * (deltaTime)
-
-                this.animation.update(deltaTime)
-            },
-
-            render (ctx, deltaTime) {
-                const currentFrame = this.animation.getCurrentFrame()
-                currentFrame.draw(ctx, this.x, this.y)
             }
         },
+
+        player = new Player({
+            spriteSheet,
+            x: 0,
+            y: 0
+        }),
 
         main = () => {
             const keysState = {}
