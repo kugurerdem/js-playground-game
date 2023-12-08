@@ -10,7 +10,7 @@
     "globals": {
         "_": "readonly",
         "utils": "readonly",
-        "assets": "readonly"
+        "assetManager": "readonly"
     },
     "extends": "eslint:recommended",
     "rules": {

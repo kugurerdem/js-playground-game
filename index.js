@@ -3,7 +3,7 @@
     const
         {fromPairs, invert, range, flatMap} = _,
         {SpriteSheet, loadImage} = utils,
-        {playerSpriteSheet, slimeSpriteSheet} = assets,
+        {loadAssets} = assetManager,
 
         canvas = document.getElementById('canvas'),
         ctx = canvas.getContext('2d'),
@@ -141,14 +141,20 @@
             })
 
             const
+                assets = await loadAssets({
+                    onProgress: ({assetName, asset}) => {
+                        console.log(`the asset ${assetName} is loaded`)
+                    }
+                }),
+
                 player = new Player({
-                    spriteSheet: await playerSpriteSheet,
+                    spriteSheet: assets.spriteSheets['player'],
                     x: 0,
                     y: 0,
                 }),
 
                 slime = new Slime({
-                    spriteSheet: await slimeSpriteSheet,
+                    spriteSheet: assets.spriteSheets['slime'],
                     x: 100,
                     y: 100,
                 }),

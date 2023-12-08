@@ -1,9 +1,9 @@
-const assets = (() => {
+const assetManager = (() => {
     const
-        {fromPairs, range} = _, // eslint disable no-undef
+        {fromPairs, range, noop} = _, // eslint disable no-undef
         {SpriteSheet, loadImage} = utils,
 
-        playerSpriteSheet = loadImage('assets/characters/player.png').then(
+        playerSpriteSheetPromise = loadImage('assets/characters/player.png').then(
             image => new SpriteSheet({
                 image,
 
@@ -89,7 +89,7 @@ const assets = (() => {
             }),
         ),
 
-        slimeSpriteSheet = loadImage('assets/characters/slime.png').then(
+        slimeSpriteSheetPromise = loadImage('assets/characters/slime.png').then(
             image => new SpriteSheet({
                 image,
 
@@ -141,9 +141,40 @@ const assets = (() => {
                 },
 
                 scale: 2,
-            })
-        )
+            }),
+        ),
+
+        loadAssets = async ({
+            onProgress = noop,
+            onLoaded = noop,
+        }) => {
+            const
+                spriteSheetPromiseEntries = [
+                    ['player', playerSpriteSheetPromise],
+                    ['slime', slimeSpriteSheetPromise],
+                ],
+
+                spriteSheetEntries = await Promise.all(
+                    spriteSheetPromiseEntries.map(async ([
+                        assetName, spriteSheetPromise,
+                    ]) => ([
+                        assetName,
+                        await spriteSheetPromise
+                            .then(spriteSheet => {
+                                onProgress({assetName, asset: spriteSheet})
+                                return spriteSheet
+                            }),
+                    ])),
+                ),
+
+                assets = {
+                    spriteSheets: fromPairs(spriteSheetEntries),
+                }
+
+            onLoaded(assets)
+            return assets
+        }
 
 
-    return {playerSpriteSheet, slimeSpriteSheet}
+    return {loadAssets}
 })()
