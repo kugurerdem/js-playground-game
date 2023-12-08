@@ -3,14 +3,11 @@
     const
         {fromPairs, invert, range, flatMap} = _,
         {SpriteSheet, loadImage} = utils,
-        {playerSpriteSheet} = assets,
+        {playerSpriteSheet, slimeSpriteSheet} = assets,
 
         canvas = document.getElementById('canvas'),
-        ctx = canvas.getContext('2d')
+        ctx = canvas.getContext('2d'),
 
-    spriteSheet = await playerSpriteSheet
-
-    const
         Entity = class {
             constructor ({spriteSheet, x, y}) {
                 this.spriteSheet = spriteSheet
@@ -100,7 +97,40 @@
             }
         },
 
-        main = () => {
+        Slime = class extends Entity {
+            constructor({spriteSheet, x, y, direction}) {
+                super({spriteSheet, x, y})
+
+                this.direction = direction || 'right'
+                this.xSpeed = 20
+
+                this.updateDirection()
+            }
+
+            updateDirection() {
+                this.direction =
+                    this.direction == 'right' ? 'left' : 'right'
+
+                this.xVel = 0
+
+                this.animation =
+                    this.spriteSheet.getAnimation(`idle-${this.direction}`)
+
+                this.animation.once('complete', () => {
+                    this.xVel =
+                        this.direction == 'right' ? this.xSpeed : -this.xSpeed
+                    this.animation =
+                        this.spriteSheet.getAnimation(`jump-${this.direction}`)
+                    this.animation.once('complete',
+                        this.updateDirection.bind(this))
+                    this.animation.start()
+                })
+
+                this.animation.start()
+            }
+        },
+
+        main = async () => {
             const keysState = {}
 
             ;['keydown', 'keyup'].forEach((eventName) => {
@@ -112,12 +142,18 @@
 
             const
                 player = new Player({
-                    spriteSheet,
+                    spriteSheet: await playerSpriteSheet,
                     x: 0,
                     y: 0,
                 }),
 
-                entities = [player]
+                slime = new Slime({
+                    spriteSheet: await slimeSpriteSheet,
+                    x: 100,
+                    y: 100,
+                }),
+
+                entities = [player, slime]
 
             let
                 lastTime = Date.now() / 1000,
