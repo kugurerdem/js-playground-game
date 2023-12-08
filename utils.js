@@ -46,7 +46,10 @@ const utils = (() => {
         }
 
         draw (ctx, x, y, _scale = 1) {
-            const scale = this.scale * _scale
+            const
+                scale = this.scale * _scale,
+                scaledX = x / scale,
+                scaledY = y / scale
 
             ctx.save()
 
