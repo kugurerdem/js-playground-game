@@ -87,7 +87,63 @@ const assets = (() => {
 
                 scale: 2,
             }),
+        ),
+
+        slimeSpriteSheet = loadImage('assets/characters/slime.png').then(
+            image => new SpriteSheet({
+                image,
+
+                frames: fromPairs(range(0, 7).flatMap((i) => ([
+                    [`idle-right-${i}`, {x: i * 32, y: 0, w: 32, h: 32}],
+                    [`idle-left-${i}`, {
+                        x: i * 32, y: 0, w: 32, h: 32, flip: true,
+                    }],
+                    [`jump-right-${i}`, {x: i * 32, y: 32, w: 32, h: 32}],
+                    [`jump-left-${i}`, {
+                        x: i * 32, y: 32, w: 32, h: 32, flip: true,
+                    }],
+                    [`dead-right-${i}`, {x: i * 32, y: 64, w: 32, h: 32}],
+                    [`dead-left-${i}`, {
+                        x: i * 32, y: 64, w: 32, h: 32, flip: true,
+                    }],
+                ]))),
+
+                animations: {
+                    'idle-right': {
+                        frames: range(0,4).map((i) => `idle-right-${i}`),
+                        frameRate: 6,
+                    },
+
+                    'idle-left': {
+                        frames: range(0,4).map((i) => `idle-left-${i}`),
+                        frameRate: 6,
+                    },
+
+                    'jump-right': {
+                        frames: range(0,6).map((i) => `jump-right-${i}`),
+                        frameRate: 6,
+                    },
+
+                    'jump-left': {
+                        frames: range(0,6).map((i) => `jump-left-${i}`),
+                        frameRate: 6,
+                    },
+
+                    'dead-right': {
+                        frames: range(0,6).map((i) => `dead-right-${i}`),
+                        frameRate: 6,
+                    },
+
+                    'dead-left': {
+                        frames: range(0,6).map((i) => `dead-left-${i}`),
+                        frameRate: 6,
+                    },
+                },
+
+                scale: 2,
+            })
         )
 
-    return {playerSpriteSheet}
+
+    return {playerSpriteSheet, slimeSpriteSheet}
 })()
