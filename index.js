@@ -69,7 +69,8 @@
 
                 if (this.xVel)
                     this.direction = this.xVel > 0 ? 'right' : 'left'
-                if (this.yVel)
+
+                else if (this.yVel)
                     this.direction = this.yVel > 0 ? 'down' : 'up'
 
                 let nextAnimationName;
@@ -99,8 +100,11 @@
 
                     if (this.animation.name.startsWith('attack'))
                         this.animation.once('complete', () => {
+                            const prefix =
+                                this.xVel || this.yVel ? 'walk' : 'idle'
+
                             this.animation = this.spriteSheet.getAnimation(
-                                'idle-' + this.direction
+                                prefix + '-' + this.direction
                             )
                             this.animation.start()
                         })
