@@ -102,9 +102,9 @@ const assetManager = (() => {
                     [`jump-left-${i}`, {
                         x: i * 32, y: 32, w: 32, h: 32, flip: true,
                     }],
-                    [`dead-right-${i}`, {x: i * 32, y: 64, w: 32, h: 32}],
+                    [`dead-right-${i}`, {x: i * 32, y: 4 * 32, w: 32, h: 32}],
                     [`dead-left-${i}`, {
-                        x: i * 32, y: 64, w: 32, h: 32, flip: true,
+                        x: i * 32, y: 4 * 32, w: 32, h: 32, flip: true,
                     }],
                 ]))),
 
