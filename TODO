@@ -1,3 +1,7 @@
-- Each animation has the same frameRate, make it possible to animations have
-  different frame rates
-- Implement attacking animation logic
+- Implement a better background
+- Implement a loading screen
+- A chest should spawn after the enemies are defeated
+- When the player interacts with chest a quote should pop up
+- Add HJKL movements
+- Improve HTML & CSS Layout
+- Add SFX
