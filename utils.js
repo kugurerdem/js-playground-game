@@ -87,13 +87,15 @@ const utils = (() => {
     }
 
     const Animation = class extends EventEmitter {
-        constructor({frames, frameRate, name}) {
+        constructor({frames, frameRate, name, noLoop}) {
             super()
             this.name = name
             this.frames = frames
             this.frameRate = frameRate
             this.accumulatedTime = 0
             this.active = false
+
+            this.noLoop = noLoop || false
         }
 
         update (deltaTime) {
@@ -108,16 +110,22 @@ const utils = (() => {
             const
                 frameIndex = Math.floor(this.accumulatedTime * this.frameRate)
 
+            if (this.noLoop) {
+                return this.frames[
+                    Math.min(frameIndex, this.frames.length - 1)
+                ]
+            }
+
             return this.frames[frameIndex % this.frames.length]
         }
 
-        start () {
-            assign(this, {active: true, accumulatedTime: 0})
+        restart () {
+            assign(this, {activate: true, accumulatedTime: 0})
         }
 
-        stop () {
-            assign(this, {active: false, accumulatedTime: 0})
-        }
+        start () { assign(this, {active: true}) }
+
+        stop () { assign(this, {active: false}) }
     }
 
     const SpriteSheet = class {
@@ -135,14 +143,14 @@ const utils = (() => {
         getAnimation (name) {
             const
                 animation = this.animations[name],
+
                 frames =
-                    animation.frames.map(frameName => this.frames[frameName]),
-                frameRate = animation.frameRate
+                    animation.frames.map(frameName => this.frames[frameName])
 
             return new Animation({
-                name, frames, frameRate,
+                ...animation,
+                name, frames,
             })
-
         }
     }
 

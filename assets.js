@@ -122,21 +122,52 @@ const assetManager = (() => {
                     'jump-right': {
                         frames: range(0,6).map((i) => `jump-right-${i}`),
                         frameRate: 6,
+                        noLoop: true,
                     },
 
                     'jump-left': {
                         frames: range(0,6).map((i) => `jump-left-${i}`),
                         frameRate: 6,
+                        noLoop: true,
                     },
 
                     'dead-right': {
                         frames: range(0,6).map((i) => `dead-right-${i}`),
                         frameRate: 6,
+                        noLoop: true,
                     },
 
                     'dead-left': {
                         frames: range(0,6).map((i) => `dead-left-${i}`),
                         frameRate: 6,
+                        noLoop: true,
+                    },
+                },
+
+                scale: 2,
+            }),
+        ),
+
+        chestSpritePromise = loadImage('assets/objects/chest_01.png').then(
+            image => new SpriteSheet({
+                image,
+
+                frames: {
+                    'closed': {x: 0, y: 0, w: 16, h: 16},
+                    'open-1': {x: 16, y: 0, w: 16, h: 16},
+                    'open-2': {x: 32, y: 0, w: 16, h: 16},
+                    'open-3': {x: 48, y: 0, w: 16, h: 16},
+                },
+
+                animations: {
+                    'closed': {
+                        frames: ['closed'],
+                        frameRate: 1,
+                    },
+                    'open': {
+                        frames: ['open-1', 'open-2', 'open-3'],
+                        frameRate: 3,
+                        noLoop: true,
                     },
                 },
 
@@ -152,6 +183,7 @@ const assetManager = (() => {
                 spriteSheetPromiseEntries = [
                     ['player', playerSpriteSheetPromise],
                     ['slime', slimeSpriteSheetPromise],
+                    ['chest', chestSpritePromise],
                 ],
 
                 spriteSheetEntries = await Promise.all(

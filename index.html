@@ -1,32 +1,92 @@
 <!doctype html>
 <html>
 <head>
-    <title>Walking Program</title>
+    <title>Ataraxia</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
         body {
-            margin: 0;
-            padding: 0;
+            width: 700px;
+            margin: 1em auto;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
         }
+
+        .quoteBox {
+            margin: 1em;
+            width: 600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #F0F8FF;
+            text-color: #000000;
+            border: 1px solid;
+            box-shadow: 0.5em 0.5em 3px rgb(0 0 0 / 50%);
+        }
+
+        .quoteBox > p, span {
+            display: inline-block;
+            margin: 0.2em;
+            height: auto;
+        }
+
+        .scrollBox {
+            margin: 1em;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: left;
+        }
+
+        button {
+            margin: 0.5em;
+            background-color: #4CAF50;
+            box-shadow: 0.5em 0.5em 3px rgb(0 0 0 / 50%)
+        }
+
+        button:hover {
+            background-color: #3e8e41;
+        }
+
+        input {
+            width: 4em;
+            text-align: center;
+        }
+
+        h1 {
+            margin: 0.5em;
+            text-shadow: 0.2em 0.2em 1px rgb(0 0 0 / 10%);
+        }
+
     </style>
 </head>
 <body>
-    <canvas id="canvas" width="600" height="350" style="border: 1px solid"></canvas>
-    <p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi.
-    Sed euismod, nisl eget
-    </p>
+    <h1>Ataraxia</h1>
+
+    <canvas
+        width="600" height="350"
+        id="canvas"
+        style="border: 1px solid"></canvas>
+
+    <div class="quoteBox">
+        <div class="scrollBox">
+            <div>
+                <button id="updateQuote">Get</button>
+                <input type="number" id="level" value="1" />
+                /
+                <span id="availableQuotes"> </span>
+            </div>
+        </div>
+
+        <p id="quoteText"> </p>
+        <span id="quoteAuthor"> </span>
+    </div>
 
     <script src="./lib/lodash.min.js"></script>
     <script src="utils.js"></script>
     <script src="assets.js"></script>
+    <script src="quotes.js"></script>
     <script src="index.js"></script>
 </body>
 </html>

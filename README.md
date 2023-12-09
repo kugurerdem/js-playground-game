@@ -1,11 +1,13 @@
-# JavaScript Playground Game
+# Ataraxia
 
-[Play the game](https://kugurerdem.github.io/js-playground-game/)
+You can play the game from
+[here](https://kugurerdem.github.io/ataraxia/)
 
-The primary objective of this repository is to embark on a recreational journey
-to explore and learn more about game development, particularly to delve into
-the inner workings of HTML Canvas. With no predefined plan or roadmap, the
-development process will unfold organically as random ideas come to my mind.
+Ataraxia is a recreational game that I have chose to create on my spare time,
+only using plain JavaScript.
+
+You play as a philosopher named Ufuk, on a quest for wisdom, facing challenges
+in my trials. After each trial, I share one of my favorite pieces of advice.
 
 # Assets
 

@@ -1,7 +1,7 @@
 (async () => {
 
     const
-        {fromPairs, invert, range, flatMap} = _,
+        {fromPairs, invert, range, flatMap, random} = _,
         {SpriteSheet, loadImage, collides, debug} = utils,
         {loadAssets} = assetManager,
 
@@ -34,9 +34,11 @@
                         this.x, this.y, currentFrame.width, currentFrame.height,
                     )
 
-                    ctx.strokeStyle = 'blue'
-                    const {x,y,width,height} = this.getHitbox()
-                    ctx.strokeRect(x,y,width,height)
+                    if (this.getHitbox) {
+                        ctx.strokeStyle = 'blue'
+                        const {x,y,width,height} = this.getHitbox()
+                        ctx.strokeRect(x,y,width,height)
+                    }
 
                     if (this.attackBox) {
                         ctx.strokeStyle = 'yellow'
@@ -45,32 +47,39 @@
                     }
                 })
             }
+
+            handleInput () {}
         },
 
         Player = class extends Entity {
-            constructor ({spriteSheet, x, y, entities}) {
-                super({spriteSheet, x, y})
+            constructor ({x, y}, gameState) {
+                super({
+                    spriteSheet: gameState.assets.spriteSheets['player'],
+                    x,
+                    y,
+                })
+
+                this.gameState = gameState
+
                 this.direction = 'down'
-                this.animation = spriteSheet.getAnimation('idle-down')
+                this.animation = this.spriteSheet.getAnimation('idle-down')
 
                 this.animation.start()
 
-                this.xSpeed = 100
-                this.ySpeed = 100
-                // TODO: ^ find a better variable name for these
-
-                this.entities = entities
+                this.xMovementSpeed = 100
+                this.yMovementSpeed = 100
             }
 
-            handleInput (input, keysState) {
+            handleInput (input) {
+                const {keysState} = this.gameState
                 this.yVel = (
-                    (keysState['ArrowUp'] ? -this.ySpeed : 0)
-                    + (keysState['ArrowDown'] ? this.xSpeed : 0)
+                    (keysState['ArrowUp'] ? -this.yMovementSpeed : 0)
+                    + (keysState['ArrowDown'] ? this.xMovementSpeed : 0)
                 )
 
                 this.xVel = (
-                    (keysState['ArrowLeft'] ? -this.xSpeed : 0)
-                    + (keysState['ArrowRight'] ? this.xSpeed : 0)
+                    (keysState['ArrowLeft'] ? -this.xMovementSpeed : 0)
+                    + (keysState['ArrowRight'] ? this.xMovementSpeed : 0)
                 )
 
                 if (this.xVel)
@@ -123,9 +132,10 @@
             attack () {
                 const attackRect = this.attackBox()
 
-                this.entities.forEach((entity) => {
+                this.gameState.entities.forEach((entity) => {
                     if (
                         entity !== this
+                        && entity.getHitbox
                         && collides(attackRect, entity.getHitbox())
                     ) {
                         entity.takeDamage()
@@ -157,11 +167,14 @@
         },
 
         Slime = class extends Entity {
-            constructor({spriteSheet, x, y, direction}) {
-                super({spriteSheet, x, y})
+            constructor({x, y, direction}, {assets}) {
+                super({
+                    spriteSheet: assets.spriteSheets['slime'],
+                    x, y,
+                })
 
                 this.direction = direction || 'right'
-                this.xSpeed = 20
+                this.xMovementSpeed = 20
 
                 this.updateDirection()
 
@@ -182,12 +195,17 @@
                         return
 
                     this.xVel =
-                        this.direction == 'right' ? this.xSpeed : -this.xSpeed
+                        this.direction == 'right'
+                            ? this.xMovementSpeed
+                            : -this.xMovementSpeed
+
                     this.animation =
                         this.spriteSheet.getAnimation(`jump-${this.direction}`)
+
                     this.animation.once('complete',
                         this.updateDirection.bind(this)
                     )
+
                     this.animation.start()
                 })
 
@@ -204,7 +222,6 @@
                 this.animation =
                     this.spriteSheet.getAnimation(`dead-${this.direction}`)
 
-                this.animation.once('complete', () => this.animation.stop())
                 this.animation.start()
             }
 
@@ -219,6 +236,32 @@
             }
         },
 
+        Chest = class extends Entity {
+            constructor({x, y}, gameState) {
+                super({
+                    x, y,
+                    spriteSheet: gameState.assets.spriteSheets['chest'],
+                })
+
+                this.gameState = gameState
+
+                this.animation = this.spriteSheet.getAnimation('closed')
+
+                this.open = false
+            }
+
+            update (deltaTime) {
+                super.update(deltaTime)
+                if (!this.open && this.gameState.isWon) {
+                    this.open = true
+                    this.animation = this.spriteSheet.getAnimation('open')
+                    this.animation.start()
+
+                    this.gameState.setLevel(this.gameState.level + 1)
+                }
+            }
+        },
+
         main = async () => {
             const
                 assets = await loadAssets({
@@ -227,55 +270,133 @@
                     }
                 }),
 
-                entities = [],
-
-                player = new Player({
-                    spriteSheet: assets.spriteSheets['player'],
-                    x: 0,
-                    y: 0,
-                    entities,
-                })
-
-            range(5).forEach((i) => {
-                entities.push(new Slime({
-                    spriteSheet: assets.spriteSheets['slime'],
-                    x: 0.2 * canvas.width + Math.random() * 0.6 * canvas.width,
-                    y: 0.2 * canvas.height + Math.random() * 0.6 * canvas.height,
-                    direction: Math.random() > 0.5 ? 'right' : 'left',
-                }))
-            })
-            entities.push(player)
-
-            const keysState = {}
+                keysState = {}
 
             ;['keydown', 'keyup'].forEach((eventName) => {
                 document.addEventListener(eventName, (e) => {
                     keysState[e.key] = eventName == 'keydown' ? true : false
-                    player.handleInput(e, keysState)
+                    gameState.entities.forEach(
+                        (entity) => entity.handleInput(e)
+                    )
                 })
             })
 
+            const updateQuote = (level) => {
+                const
+                    levelToBeShown = Math.min(level, quotes.length),
+                    [quote, author] =
+                        quotes[levelToBeShown - 1]
 
-            let
-                lastTime = Date.now() / 1000,
-                deltaTime = 0
+                document.getElementById('quoteText').innerHTML = quote
+                document.getElementById('quoteAuthor').innerHTML = author
+                document.getElementById('level').value = levelToBeShown
+            }
+
+            const updateAvailableQuotes = (level) => {
+                document.getElementById('availableQuotes').innerText =
+                    Math.min(level, quotes.length)
+            }
+
+            document.getElementById('updateQuote')
+                .addEventListener('click', () => {
+                    const level = document.getElementById('level').value
+                    updateQuote(level)
+                })
+
+            updateAvailableQuotes(localStorage.getItem('level') || 1)
+            updateQuote(localStorage.getItem('level') || 1)
+
+            const
+                initGameState = () => {
+                    const gameState = {
+                        lastTime: Date.now() / 1000,
+                        deltaTime: 0,
+                        assets,
+                        keysState,
+                        level: Number(localStorage.getItem('level') || 1),
+                        isWon: false,
+                        entities: [],
+
+                        setLevel: (level) => {
+                            localStorage.setItem('level', level)
+                            gameState.level = level
+                            updateAvailableQuotes(level)
+                            updateQuote(level)
+                        }
+                    }
+
+                    const player = new Player({
+                        x: 0,
+                        y: 0,
+                    }, gameState)
+
+                    const chest = new Chest({
+                        x: 0.5 * canvas.width,
+                        y: 0.5 * canvas.height,
+                    }, gameState)
+
+                    gameState.entities.push(chest)
+
+                    range(5).forEach((i) => {
+                        gameState.entities.push(new Slime({
+                            x: random(0.2, 0.8) * canvas.width,
+                            y: random(0.2, 0.8) * canvas.height,
+                            direction: Math.random() > 0.5 ? 'left' : 'right',
+                        }, gameState))
+                    })
+
+                    gameState.entities.push(player)
+
+                    return gameState
+                }
+
+            let gameState = initGameState()
 
             const loop = () => {
-                update(deltaTime, entities)
-                render(deltaTime, entities)
+                update(gameState)
+                render(gameState)
 
-                now = Date.now() / 1000
-                deltaTime = now - lastTime
-                lastTime = now
+                const now = Date.now() / 1000
+
+                gameState.deltaTime = now - gameState.lastTime
+                gameState.lastTime = now
+
+                if (!gameState.isWon) {
+                    gameState.isWon = gameState.entities
+                         .filter((entity) => entity instanceof Slime)
+                        .every((slime) => slime.dead)
+                }
+
+                if (gameState.isWon) {
+                    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)'
+                    ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+                    ctx.fillStyle = 'white'
+                    ctx.font = '32px sans-serif'
+                    ctx.textAlign = 'center'
+                    ctx.fillText(
+                        'Wisdom found!',
+                        canvas.width / 2,
+                        canvas.height / 2,
+                    )
+                    ctx.fillText(
+                        'Press R to continue the Journey',
+                        canvas.width / 2,
+                        canvas.height / 2 + 48,
+                    )
+
+                    if (gameState.keysState['r'])
+                        gameState = initGameState()
+                }
             }
 
             setInterval(loop, 1000 / 60)
         },
 
-        update = (deltaTime, entities) =>
+        update = ({deltaTime, entities}) =>
             entities.forEach((entity) => entity.update(deltaTime)),
 
-        render = (deltaTime, entities) => {
+        render = ({deltaTime, entities}) => {
             // see, https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createRadialGradient
             const gradient = ctx.createRadialGradient(
                 canvas.width / 2,
