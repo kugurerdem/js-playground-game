@@ -37,6 +37,12 @@
                     ctx.strokeStyle = 'blue'
                     const {x,y,width,height} = this.getHitbox()
                     ctx.strokeRect(x,y,width,height)
+
+                    if (this.attackBox) {
+                        ctx.strokeStyle = 'yellow'
+                        const {x,y,width,height} = this.attackBox()
+                        ctx.strokeRect(x,y,width,height)
+                    }
                 })
             }
         },
@@ -115,7 +121,7 @@
             }
 
             attack () {
-                const attackRect = this.getHitbox()
+                const attackRect = this.attackBox()
 
                 this.entities.forEach((entity) => {
                     if (
@@ -134,6 +140,18 @@
                     y: this.y + height / 2.5,
                     width: width / 2,
                     height: height / 2,
+                }
+            }
+
+            attackBox () {
+                // TODO: attack box should behave differently depending on
+                // the direction the player is facing
+                const {width,height} = this.animation.getCurrentFrame()
+                return {
+                    x: this.x + width / 8,
+                    y: this.y + height / 2.5,
+                    width: width * (3/4),
+                    height: height / 1.75,
                 }
             }
         },
@@ -221,8 +239,8 @@
             range(5).forEach((i) => {
                 entities.push(new Slime({
                     spriteSheet: assets.spriteSheets['slime'],
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
+                    x: 0.2 * canvas.width + Math.random() * 0.6 * canvas.width,
+                    y: 0.2 * canvas.height + Math.random() * 0.6 * canvas.height,
                     direction: Math.random() > 0.5 ? 'right' : 'left',
                 }))
             })
