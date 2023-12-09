@@ -2,7 +2,7 @@
 
     const
         {fromPairs, invert, range, flatMap} = _,
-        {SpriteSheet, loadImage, collides} = utils,
+        {SpriteSheet, loadImage, collides, debug} = utils,
         {loadAssets} = assetManager,
 
         canvas = document.getElementById('canvas'),
@@ -28,14 +28,16 @@
                 const currentFrame = this.animation.getCurrentFrame()
                 currentFrame.draw(ctx, this.x, this.y)
 
-                ctx.strokeStyle = 'red'
-                ctx.strokeRect(
-                    this.x, this.y, currentFrame.width, currentFrame.height,
-                )
+                debug(() => {
+                    ctx.strokeStyle = 'red'
+                    ctx.strokeRect(
+                        this.x, this.y, currentFrame.width, currentFrame.height,
+                    )
 
-                ctx.strokeStyle = 'blue'
-                const {x,y,width,height} = this.getHitbox()
-                ctx.strokeRect(x,y,width,height)
+                    ctx.strokeStyle = 'blue'
+                    const {x,y,width,height} = this.getHitbox()
+                    ctx.strokeRect(x,y,width,height)
+                })
             }
         },
 
@@ -67,8 +69,7 @@
 
                 if (this.xVel)
                     this.direction = this.xVel > 0 ? 'right' : 'left'
-
-                else if (this.yVel)
+                if (this.yVel)
                     this.direction = this.yVel > 0 ? 'down' : 'up'
 
                 let nextAnimationName;

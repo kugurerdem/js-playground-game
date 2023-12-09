@@ -1,3 +1,4 @@
+let DEBUG_MODE = window.location.hash === '#debug'
 const utils = (() => {
     const {assign} = Object
 
@@ -159,6 +160,8 @@ const utils = (() => {
         || box1.y > box2.y + box2.height
     )
 
+    const debug = (callbackFn) => DEBUG_MODE && callbackFn()
+
     return {
         EventEmitter,
 
@@ -168,5 +171,6 @@ const utils = (() => {
         loadImage,
 
         collides,
+        debug,
     }
 })()
