@@ -47,8 +47,8 @@
 
                 this.animation.start()
 
-                this.xSpeed = 50
-                this.ySpeed = 50
+                this.xSpeed = 100
+                this.ySpeed = 100
                 // TODO: ^ find a better variable name for these
 
                 this.entities = entities
