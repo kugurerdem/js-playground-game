@@ -37,10 +37,15 @@ const utils = (() => {
             this.image = image
             this.x = x
             this.y = y
-            this.w = w
-            this.h = h
+
+            this.imageWidth = w
+            this.imageHeight = h
 
             this.scale = scale || 1
+
+            this.width = w * this.scale
+            this.height = h * this.scale
+
             this.flip = flip || false
             this.flop = flop || false
         }
@@ -48,12 +53,15 @@ const utils = (() => {
         draw (ctx, x, y, _scale = 1) {
             const
                 scale = this.scale * _scale,
+
                 scaledX = x / scale,
                 scaledY = y / scale
+            // NOTE: Since we scale the coordinate system, we need to downscale
+            // X and Y coordinates to match the scaled image.
 
             ctx.save()
 
-            // Note, we could have also used the setTransform method, however
+            // NOTE: we could have also used the setTransform method, however
             // this is a bit more explicit way of achieving to scale the
             // coordinate system. For reference:
             // https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/setTransform
@@ -65,12 +73,13 @@ const utils = (() => {
             ctx.drawImage(
                 this.image,
                 // Source coordinates
-                this.x, this.y, this.w, this.h,
+                this.x, this.y, this.imageWidth, this.imageHeight,
                 // Destination coordinates
-                this.flip ? -x -this.w: x,
-                this.flop ? -y -this.h: y,
-                this.w, this.h,
+                this.flip ? -scaledX -this.imageWidth: scaledX,
+                this.flop ? -scaledY -this.imageHeight: scaledY,
+                this.imageWidth, this.imageHeight,
             )
+
 
             ctx.restore()
         }
