@@ -24,9 +24,18 @@
                 this.animation.update(deltaTime)
             }
 
-            render (ctx, deltaTime) {
+            render (deltaTime) {
                 const currentFrame = this.animation.getCurrentFrame()
                 currentFrame.draw(ctx, this.x, this.y)
+
+                ctx.strokeStyle = 'red'
+                ctx.strokeRect(
+                    this.x, this.y, currentFrame.width, currentFrame.height,
+                )
+
+                ctx.strokeStyle = 'blue'
+                const {x,y,width,height} = this.getHitbox()
+                ctx.strokeRect(x,y,width,height)
             }
         },
 
@@ -95,6 +104,16 @@
                 if (!this.animation.active)
                     this.animation.start()
             }
+
+            getHitbox () {
+                const {width,height} = this.animation.getCurrentFrame()
+                return {
+                    x: this.x + width / 4,
+                    y: this.y + height / 2.5,
+                    width: width / 2,
+                    height: height / 2,
+                }
+            }
         },
 
         Slime = class extends Entity {
@@ -140,6 +159,18 @@
                 })
             })
 
+            getHitbox() {
+                const {width,height} = this.animation.getCurrentFrame()
+                return {
+                    x: this.x + width / 4,
+                    y: this.y + height / 4,
+                    width: width / 2,
+                    height: height / 2,
+                }
+            }
+        },
+
+        main = async () => {
             const
                 assets = await loadAssets({
                     onProgress: ({assetName, asset}) => {
