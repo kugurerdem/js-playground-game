@@ -2,7 +2,7 @@
 
     const
         {fromPairs, invert, range, flatMap} = _,
-        {SpriteSheet, loadImage} = utils,
+        {SpriteSheet, loadImage, collides} = utils,
         {loadAssets} = assetManager,
 
         canvas = document.getElementById('canvas'),
@@ -40,7 +40,7 @@
         },
 
         Player = class extends Entity {
-            constructor ({spriteSheet, x, y}) {
+            constructor ({spriteSheet, x, y, entities}) {
                 super({spriteSheet, x, y})
                 this.direction = 'down'
                 this.animation = spriteSheet.getAnimation('idle-down')
@@ -50,6 +50,8 @@
                 this.xSpeed = 50
                 this.ySpeed = 50
                 // TODO: ^ find a better variable name for these
+
+                this.entities = entities
             }
 
             handleInput (input, keysState) {
@@ -78,8 +80,10 @@
                     input.code == 'Space'
                     && input.type == 'keydown'
                     && input.repeat == false
-                )
+                ){
                     nextAnimationName = 'attack-' + this.direction
+                    this.attack()
+                }
 
                 else
                     nextAnimationName =
@@ -105,6 +109,19 @@
                     this.animation.start()
             }
 
+            attack () {
+                const attackRect = this.getHitbox()
+
+                this.entities.forEach((entity) => {
+                    if (
+                        entity !== this
+                        && collides(attackRect, entity.getHitbox())
+                    ) {
+                        entity.takeDamage()
+                    }
+                })
+            }
+
             getHitbox () {
                 const {width,height} = this.animation.getCurrentFrame()
                 return {
@@ -124,6 +141,8 @@
                 this.xSpeed = 20
 
                 this.updateDirection()
+
+                this.dead = false
             }
 
             updateDirection() {
@@ -136,28 +155,35 @@
                     this.spriteSheet.getAnimation(`idle-${this.direction}`)
 
                 this.animation.once('complete', () => {
+                    if (this.dead)
+                        return
+
                     this.xVel =
                         this.direction == 'right' ? this.xSpeed : -this.xSpeed
                     this.animation =
                         this.spriteSheet.getAnimation(`jump-${this.direction}`)
                     this.animation.once('complete',
-                        this.updateDirection.bind(this))
+                        this.updateDirection.bind(this)
+                    )
                     this.animation.start()
                 })
 
                 this.animation.start()
             }
-        },
 
-        main = async () => {
-            const keysState = {}
+            takeDamage() {
+                if (this.dead)
+                    return
 
-            ;['keydown', 'keyup'].forEach((eventName) => {
-                document.addEventListener(eventName, (e) => {
-                    keysState[e.key] = eventName == 'keydown' ? true : false
-                    player.handleInput(e, keysState)
-                })
-            })
+                this.dead = true
+                this.animation.stop()
+                this.xVel = 0
+                this.animation =
+                    this.spriteSheet.getAnimation(`dead-${this.direction}`)
+
+                this.animation.once('complete', () => this.animation.stop())
+                this.animation.start()
+            }
 
             getHitbox() {
                 const {width,height} = this.animation.getCurrentFrame()
