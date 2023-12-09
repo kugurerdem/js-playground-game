@@ -254,8 +254,22 @@
             entities.forEach((entity) => entity.update(deltaTime)),
 
         render = (deltaTime, entities) => {
-            ctx.fillStyle = 'lightgray'
-            ctx.fillRect(0, 0, canvas.width, canvas.height)
+            // see, https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/createRadialGradient
+            const gradient = ctx.createRadialGradient(
+                canvas.width / 2,
+                canvas.height / 2,
+                0,
+
+                canvas.width / 2,
+                canvas.height / 2,
+                Math.max(canvas.width, canvas.height) / 2
+            );
+
+            gradient.addColorStop(0, 'lightgreen');
+            gradient.addColorStop(1, 'darkgreen');
+
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             entities.forEach((entity) => entity.render(ctx, deltaTime))
         }
