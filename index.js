@@ -204,19 +204,34 @@
                     }
                 }),
 
+                entities = [],
+
                 player = new Player({
                     spriteSheet: assets.spriteSheets['player'],
                     x: 0,
                     y: 0,
-                }),
+                    entities,
+                })
 
-                slime = new Slime({
+            range(5).forEach((i) => {
+                entities.push(new Slime({
                     spriteSheet: assets.spriteSheets['slime'],
-                    x: 100,
-                    y: 100,
-                }),
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    direction: Math.random() > 0.5 ? 'right' : 'left',
+                }))
+            })
+            entities.push(player)
 
-                entities = [player, slime]
+            const keysState = {}
+
+            ;['keydown', 'keyup'].forEach((eventName) => {
+                document.addEventListener(eventName, (e) => {
+                    keysState[e.key] = eventName == 'keydown' ? true : false
+                    player.handleInput(e, keysState)
+                })
+            })
+
 
             let
                 lastTime = Date.now() / 1000,
