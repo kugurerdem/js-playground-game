@@ -1,4 +1,3 @@
-- Implement restart logic
-- Implement a loading screen
-- Add HJKL movements
-- Add SFX
+- Update README and game
+- Add IDs, tags to the quotes so that they can be filtered, be referred, and so
+  on...
