@@ -20,4 +20,8 @@ const quotes = [
     ['No man is free who is not master of himself.', 'Epictetus'],
     ['Seek not the good in external things;seek it in yourselves.', 'Epictetus'],
     ['A gem cannot be polished without friction, nor a man perfected without trials.', 'Seneca'],
+    ['The ability to simplify means to eliminate the unnecessary so that the necessary may speak.', 'Hans Hofmann'],
+    ['Better than a thousand hollow words is one word that brings peace.', 'Buddha'],
+    ['«La perfection est atteinte non quand il ne reste rien à ajouter, mais quand il ne reste rien à enlever». (“Perfection is attained not when there is nothing more to add, but when there is nothing more to remove”.)', 'Antoine de Saint-Exupéry'],
+    ['Where wisdom reigns, there is no conflict between thinking and feeling.', 'Carl Gustav Jung'],
 ]
