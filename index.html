@@ -1,92 +1,32 @@
 <!doctype html>
 <html>
 <head>
-    <title>Ataraxia</title>
+    <title>quotes | ataraxia</title>
+    <script src="quotes.js"></script>
     <style>
-        body {
-            width: 700px;
-            margin: 1em auto;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .quoteBox {
-            margin: 1em;
-            width: 600px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            background-color: #F0F8FF;
-            text-color: #000000;
-            border: 1px solid;
-            box-shadow: 0.5em 0.5em 3px rgb(0 0 0 / 50%);
-        }
-
-        .quoteBox > p, span {
-            display: inline-block;
-            margin: 0.2em;
-            height: auto;
-        }
-
-        .scrollBox {
-            margin: 1em;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: left;
-        }
-
-        button {
-            margin: 0.5em;
-            background-color: #4CAF50;
-            box-shadow: 0.5em 0.5em 3px rgb(0 0 0 / 50%)
-        }
-
-        button:hover {
-            background-color: #3e8e41;
-        }
-
-        input {
-            width: 4em;
+        h1 {
             text-align: center;
         }
-
-        h1 {
-            margin: 0.5em;
-            text-shadow: 0.2em 0.2em 1px rgb(0 0 0 / 10%);
+        blockquote {
+            border-left: 10px solid #ccc;
+            background: #f8f8f8;
+            margin: 1em;
+            padding: 0.2em 1em;
         }
-
     </style>
 </head>
 <body>
-    <h1>Ataraxia</h1>
+    <h1>Wisdom Quotes for Ataraxia</h1>
+    <script>
+        quotes.forEach(([quote, author], idx) => {
+            document.body.innerHTML += `
+                <blockquote id="${idx}">
+                    <p> ${quote}</p>
+                    <footer>- ${author}</footer>
+                </blockquote>
+            `
+        })
 
-    <canvas
-        width="600" height="350"
-        id="canvas"
-        style="border: 1px solid"></canvas>
-
-    <div class="quoteBox">
-        <div class="scrollBox">
-            <div>
-                <button id="updateQuote">Get</button>
-                <input type="number" id="level" value="1" />
-                /
-                <span id="availableQuotes"> </span>
-            </div>
-        </div>
-
-        <p id="quoteText"> </p>
-        <span id="quoteAuthor"> </span>
-    </div>
-
-    <script src="./lib/lodash.min.js"></script>
-    <script src="utils.js"></script>
-    <script src="assets.js"></script>
-    <script src="quotes.js"></script>
-    <script src="index.js"></script>
+    </script>
 </body>
 </html>
