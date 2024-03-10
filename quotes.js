@@ -24,4 +24,5 @@ const quotes = [
     ['Better than a thousand hollow words is one word that brings peace.', 'Buddha'],
     ['«La perfection est atteinte non quand il ne reste rien à ajouter, mais quand il ne reste rien à enlever». (“Perfection is attained not when there is nothing more to add, but when there is nothing more to remove”.)', 'Antoine de Saint-Exupéry'],
     ['Where wisdom reigns, there is no conflict between thinking and feeling.', 'Carl Gustav Jung'],
+    ['Vain is the word of that philosopher which does not heal any suffering of man.', 'Epicurus'],
 ]
