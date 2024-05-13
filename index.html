@@ -7,6 +7,19 @@
         h1 {
             text-align: center;
         }
+
+        main {
+            width: 720px;
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        @media screen and (max-width: 720px) {
+            main {
+                width: 100%; /* Adjusted width for smaller screens */
+            }
+        }
+
         blockquote {
             border-left: 10px solid #ccc;
             background: #f8f8f8;
@@ -16,32 +29,37 @@
     </style>
 </head>
 <body>
-    <h1>Wisdom</h1>
+    <main>
+        <h1>Wisdom</h1>
 
-    <p>
-    This page is where I keep a list of quotes that I find inspiring for a good
-    living. I intend to use this page as a way to recommend these quotes to
-    others as well as a reminder to myself. I hope you find them as inspiring
-    as I do.
-    </p>
+        <p>
+        This page is where I keep a list of quotes that I find inspiring for a good
+        living. I intend to use this page as a way to recommend these quotes to
+        others as well as a reminder to myself. I hope you find them as inspiring
+        as I do.
+        </p>
 
-    <p>
-    I have also created a <a href="game.html" target="_blank">simple game</a>
-    for recreational purposes. In the game, a philosopher pratagonist, Ufuk,
-    embarks on a quest of defeating certaing monsters for the purpose of
-    unlocking my scrolls of wisdom.
-    </p>
+        <p>
+        I have also created a <a href="game/index.html" target="_blank">simple game</a>
+        for recreational purposes. In the game, a philosopher pratagonist, Ufuk,
+        embarks on a quest of defeating certaing monsters for the purpose of
+        unlocking my scrolls of wisdom.
+        </p>
+
+        <hr/>
+
+        <div id="quotes"> </div>
+    </main>
 
     <script>
         quotes.forEach(([quote, author], idx) => {
-            document.body.innerHTML += `
+            document.getElementById('quotes').innerHTML += `
                 <blockquote id="${idx}">
                     <p> ${quote}</p>
                     <footer>- ${author}</footer>
                 </blockquote>
             `
         })
-
     </script>
 </body>
 </html>
