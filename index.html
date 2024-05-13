@@ -2,31 +2,9 @@
 <html>
 <head>
     <title>wisdom | rugu</title>
+    <link rel="stylesheet" href="style.css">
     <script src="quotes.js"></script>
-    <style>
-        h1 {
-            text-align: center;
-        }
-
-        main {
-            width: 720px;
-            margin: 0 auto;
-            padding: 0;
-        }
-
-        @media screen and (max-width: 720px) {
-            main {
-                width: 100%; /* Adjusted width for smaller screens */
-            }
-        }
-
-        blockquote {
-            border-left: 10px solid #ccc;
-            background: #f8f8f8;
-            margin: 1em;
-            padding: 0.2em 1em;
-        }
-    </style>
+    <script src="index.js"> </script>
 </head>
 <body>
     <main>
@@ -51,15 +29,5 @@
         <div id="quotes"> </div>
     </main>
 
-    <script>
-        quotes.forEach(([quote, author], idx) => {
-            document.getElementById('quotes').innerHTML += `
-                <blockquote id="${idx}">
-                    <p> ${quote}</p>
-                    <footer>- ${author}</footer>
-                </blockquote>
-            `
-        })
-    </script>
 </body>
 </html>

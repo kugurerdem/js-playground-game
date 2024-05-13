@@ -1,0 +1,22 @@
+h1 {
+    text-align: center;
+}
+
+main {
+    width: 720px;
+    margin: 0 auto;
+    padding: 0;
+}
+
+@media screen and (max-width: 720px) {
+    main {
+        width: 100%; /* Adjusted width for smaller screens */
+    }
+}
+
+blockquote {
+    border-left: 10px solid #ccc;
+    background: #f8f8f8;
+    margin: 1em;
+    padding: 0.2em 1em;
+}
