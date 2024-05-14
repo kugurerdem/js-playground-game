@@ -1,3 +1,7 @@
+main p {
+    font: 16px/180% 'DejaVu Serif', 'Bitstream Vera Serif', 'Georgia', serif
+}
+
 h1 {
     text-align: center;
 }
@@ -17,12 +21,13 @@ main {
 input#search {
     display: block;
     margin: 0 auto;
+    height: 1.6rem;
 }
 
 blockquote {
     border-left: 10px solid #ccc;
     background: #f8f8f8;
-    margin: 1em;
+    margin: 1em 0em;
     padding: 0.2em 1em;
 }
 
@@ -43,6 +48,6 @@ button:hover {
 }
 
 button svg {
-    width: 18px;
-    height: 18px;
+    width: 22px;
+    height: 22px;
 }
