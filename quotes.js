@@ -26,4 +26,6 @@ const quotes = [
     ['Where wisdom reigns, there is no conflict between thinking and feeling.', 'Carl Gustav Jung'],
     ['Vain is the word of that philosopher which does not heal any suffering of man.', 'Epicurus'],
     ['A man who suffers before it is necessary, suffers more than is necessary.', 'Seneca'],
+    ['Nowhere you can go is more peaceful -more free of interruptions- than your own soul.', 'Marcus Aurelius'],
+    ['If you can eliminate it, you\'ll have more time, and more tranquility. Ask yourself at every moment, "Is this necessary?" But we need to eliminate unnecessary assumptions as well, to eliminate the unnecessary actions that follow.', 'Marcus Aurelius']
 ]
