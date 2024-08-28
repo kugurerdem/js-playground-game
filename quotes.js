@@ -27,5 +27,11 @@ const quotes = [
     ['Vain is the word of that philosopher which does not heal any suffering of man.', 'Epicurus'],
     ['A man who suffers before it is necessary, suffers more than is necessary.', 'Seneca'],
     ['Nowhere you can go is more peaceful -more free of interruptions- than your own soul.', 'Marcus Aurelius'],
-    ['If you can eliminate it, you\'ll have more time, and more tranquility. Ask yourself at every moment, "Is this necessary?" But we need to eliminate unnecessary assumptions as well, to eliminate the unnecessary actions that follow.', 'Marcus Aurelius']
+    ['If you can eliminate it, you\'ll have more time, and more tranquility. Ask yourself at every moment, "Is this necessary?" But we need to eliminate unnecessary assumptions as well, to eliminate the unnecessary actions that follow.', 'Marcus Aurelius'],
+    ['If you want something you\'ve never had You must be willing to do something you\'ve never done.', 'Thomas Jefferson'],
+    ['We cannot live better than in seeking to become better.', 'Socrates'],
+    ['No man has the right to be an amateur in the matter of physical training. It is a shame for a man to grow old without seeing the beauty and strength which his body is capable.', 'Socrates'],
+    ['The unexamined life is not worth living.', 'Socrates'],
+    ['If you don\'t sacrifice for what you want, what you want becomes the sacrifice.', 'Anonymous'],
+    ['What man actually needs is not a tensionless state but rather the striving and the struggling for some goal worthy of him.', 'Viktor Frankl']
 ]
