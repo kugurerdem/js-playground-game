@@ -270,6 +270,8 @@
                     }
                 }),
 
+                quotes = await (fetch('../quotes.json').then(r => r.json())),
+
                 keysState = {}
 
             ;['keydown', 'keyup'].forEach((eventName) => {
@@ -284,7 +286,7 @@
             const updateQuote = (level) => {
                 const
                     levelToBeShown = Math.min(level, quotes.length),
-                    [quote, author] =
+                    {quote, author} =
                         quotes[levelToBeShown - 1]
 
                 document.getElementById('quoteText').innerHTML = quote
