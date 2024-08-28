@@ -32,7 +32,8 @@ blockquote {
 }
 
 blockquote.highlight {
-    border: 2px solid;
+    border-left: 10px solid #666;
+    background: #e7e7e7;
 }
 
 blockquote > footer {
