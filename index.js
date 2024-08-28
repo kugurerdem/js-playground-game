@@ -27,15 +27,9 @@ const
 
     render = () => {
         document.getElementById('quotes').innerHTML = App()
-
-        document
-            .querySelectorAll('.copy-link')
-            .forEach(b => b.addEventListener('click', (e) => console.log(e)));
     },
 
-    App = () => `
-        ${QuoteList(state.quotes)}
-    `,
+    App = () => `${QuoteList(state.quotes)}`,
 
     QuoteList = (quotes) => {
         return quotes
