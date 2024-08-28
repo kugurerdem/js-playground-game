@@ -31,6 +31,10 @@ blockquote {
     padding: 0.2em 1em;
 }
 
+blockquote.highlight {
+    border: 2px solid;
+}
+
 blockquote > footer {
     display: flex;
     justify-content: space-between;

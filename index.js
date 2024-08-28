@@ -1,6 +1,7 @@
 const
     state = {
         searchText: null,
+        fragmentedId: window.location.hash?.slice(1),
         quotes: [],
         recentlyClickedId: null,
     },
@@ -58,7 +59,12 @@ const
             copyLink = window.location.host.concat('/#' + idx)
 
         return `
-            <blockquote id="${idx}" ${hidden}>
+            <blockquote
+                id="${idx}"
+                ${state.fragmentedId == idx
+                    ? 'class = "highlight"'
+                    : ''}
+                ${hidden}>
                 <p> ${mark(quote, state.searchText)} </p>
                 <footer>
                     <span> - ${mark(author, state.searchText)} </span>
