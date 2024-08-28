@@ -52,7 +52,7 @@ const
                     ? 'hidden'
                     : '',
 
-            copyText = [quote, author].join('\n'),
+            copyText = [quote, author].join('\n\n -'),
 
             copyLink = window.location.host.concat('#' + idx)
 
