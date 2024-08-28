@@ -55,7 +55,7 @@ const
             copyTextId = `copy-text-${idx}`,
             copyLinkId = `copy-link-${idx}`,
 
-            copyLink = window.location.host.concat('#' + idx)
+            copyLink = window.location.host.concat('/#' + idx)
 
         return `
             <blockquote id="${idx}" ${hidden}>
