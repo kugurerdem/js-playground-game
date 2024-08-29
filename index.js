@@ -61,7 +61,7 @@ const
         return `
             <blockquote
                 id="${idx}"
-                ${state.fragmentedId == idx
+                ${state.fragmentedId === String(idx)
                     ? 'class = "highlight"'
                     : ''}
                 ${hidden}>
